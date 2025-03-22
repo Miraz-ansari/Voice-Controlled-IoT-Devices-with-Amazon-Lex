@@ -49,3 +49,40 @@ AmazonDynamoDBFullAccess (for updating device state).
 AWSLambdaBasicExecutionRole (for logging).
 Lambda Code for IoT Device Control
 Here’s the Lambda function code that handles voice commands, interacts with the IoT device, and updates its state in DynamoDB:
+
+Explanation:
+IoT Core: The function publishes to an IoT topic to control the device.
+DynamoDB: It stores or updates the current state (on/off) of the IoT device.
+Lex Interaction: Sends feedback to Lex, confirming the action taken (e.g., “The light has been turned on”).
+
+
+5. Connect Lambda Function to Lex Bot
+In the Amazon Lex Console, navigate to your ControlDevice intent.
+Set the Fulfillment option to invoke the IoTControlFunction Lambda function.
+Save and build the Lex bot.
+
+
+6. Test the Voice-Controlled IoT Device
+You can now test the system by interacting with the Lex chatbot. You can use text or voice commands such as:
+"Turn on the Light"
+"Turn off the Fan"
+"Set AirConditioner to on"
+After issuing the commands, check DynamoDB to see if the device states are updated accordingly. You can also check the IoT Core dashboard to confirm that the corresponding IoT device receives the command and acts upon it.
+
+
+Detailed Walkthrough:
+Amazon Lex: Recognizes user voice commands, extracting key information like the device and the action to be performed.
+AWS IoT Core: Manages and controls the IoT device by sending the appropriate messages based on voice commands.
+AWS Lambda: Serves as the intermediary between Lex and IoT Core, receiving the intent from Lex and publishing messages to IoT topics.
+DynamoDB: Tracks the current state of each IoT device for future reference and analytics.
+CloudWatch: Logs any potential issues or exceptions during the communication between Lex, Lambda, and IoT Core.
+
+
+Cost and Free Tier Usage:
+Amazon Lex: Free tier includes 10,000 text requests and 5,000 speech requests per month for the first 12 months.
+AWS IoT Core: Free tier includes 250,000 messages per month for 12 months.
+AWS Lambda: Free tier includes 1 million requests and 400,000 GB-seconds of compute time per month.
+DynamoDB: Free tier includes 25GB of storage and 25 Write/Read Capacity Units.
+
+
+This project creates a smart home or office environment where you can control IoT devices through natural voice commands, all powered by AWS services within the Free Tier limits. It’s perfect for automating IoT device management and demonstrating the capabilities of AWS AI/ML and IoT services.
