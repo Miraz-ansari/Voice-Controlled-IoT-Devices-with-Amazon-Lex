@@ -1,0 +1,45 @@
+Step-by-Step Instructions:
+1. Set Up an IoT Device in AWS IoT Core
+Go to the AWS IoT Core Console.
+Click Manage > Things > Create.
+Select Create a single thing and name it (e.g., SmartLight).
+Click Next, and create a new certificate for the device.
+Download the certificate and keys, and activate the certificate.
+Attach a policy that allows the device to publish and subscribe to AWS IoT Core topics (e.g., iot:Publish, iot:Subscribe, iot:Receive, and iot:Connect).
+2. Create a DynamoDB Table to Store Device State
+Go to the DynamoDB Console.
+Click Create Table.
+Name the table (e.g., IoTDeviceState).
+Set DeviceID as the Partition Key (type: String).
+Set State as the Sort Key (type: String).
+Leave the default settings and click Create.
+3. Create a Lex Chatbot for Voice Commands
+Go to the Amazon Lex Console.
+Click Create Bot.
+Name the bot (e.g., IoTControlBot).
+Choose Create a new role for the bot to assume.
+Under Language, choose English (US).
+Select No for voice interaction unless you need text-to-speech.
+Click Create.
+Once the bot is created, define intents that will recognize the user’s commands:
+Intent: ControlDevice
+Sample utterances:
+"Turn on the {Device}"
+"Turn off the {Device}"
+"Set {Device} to {State}"
+Create a slot called Device to capture the name of the device (e.g., Light).
+Create another slot called State to capture the command (e.g., on, off).
+Set the Fulfillment to invoke a Lambda function, which will control the device based on the user’s voice commands.
+4. Create a Lambda Function to Control IoT Devices
+Now create a Lambda function that receives input from Lex, interacts with the IoT device via AWS IoT Core, and updates the device state in DynamoDB.
+Go to the Lambda Console.
+Click Create Function.
+Select Author from Scratch.
+Name the function (e.g., IoTControlFunction).
+Choose Python 3.9 as the runtime.
+Attach a role with the following permissions:
+AWSIoTFullAccess (for controlling IoT devices).
+AmazonDynamoDBFullAccess (for updating device state).
+AWSLambdaBasicExecutionRole (for logging).
+Lambda Code for IoT Device Control
+Here’s the Lambda function code that handles voice commands, interacts with the IoT device, and updates its state in DynamoDB:
